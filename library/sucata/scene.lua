@@ -4,10 +4,6 @@
 ---@class sucata.scene
 sucata.scene = {}
 
----Load a scene with the given entities
----@param entities Entity[] Array of entity tables to load into the scene
-function sucata.scene.load_scene(entities) end
-
 ---Spawn an entity in the scene
 ---@param entity Entity The entity table to spawn
 ---@return number entity_id The ID of the spawned entity
@@ -60,14 +56,10 @@ function sucata.scene.get_entities() end
 ---@return number[] entity_ids Array of entity IDs with the given tag
 function sucata.scene.get_entities_by_tag(tag) end
 
----Clear all entities from the scene
+---Destroy every entity in the scene at the end of the frame, keeping global entities and the ones spawned after this call
 function sucata.scene.clear_entities() end
 
----Registers a callback to run when the scene starts. If the scene has already started, the callback is called immediately.
----@param callback function The function to call when the scene starts
-function sucata.scene.init(callback) end
-
----Stores an entity globally so it persists across scene loads
+---Stores an entity globally under a key; global entities are not removed by clear_entities
 ---@param key string The key to store the entity under
 ---@param entity Entity The entity to store
 ---@return number entity_id The ID of the spawned global entity

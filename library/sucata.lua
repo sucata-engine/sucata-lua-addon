@@ -14,6 +14,12 @@ sucata = {}
 ---@field free function? The free function called when the entity is destroyed, contains state as parameter
 ---@field init function? The init function called when the entity is spawned, contains state as parameter
 
+---@class Root
+---@field init fun()? Called once when the game starts, before the entities
+---@field tick fun()? Called every frame, before the entities
+---@field draw fun()? Called every frame, before the entities; drawing is allowed here
+---@field free fun()? Called once when the game closes, before the entities are freed
+
 ---@class Entity
 ---@field state State The state of the entity
 ---@field behaviours? Behaviour[] List of behaviours attached to the entity
