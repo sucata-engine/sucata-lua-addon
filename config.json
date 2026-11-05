@@ -3,5 +3,7 @@
 	"words": [
 		"sucata%.%w+"
 	],
-	"settings": {}
+	"settings": {
+		"Lua.runtime.version": "LuaJIT"
+	}
 }

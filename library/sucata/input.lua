@@ -89,7 +89,13 @@ function sucata.input.is_released(...) end
 ---Register an area as hoverable for the current frame and return whether the
 ---mouse is currently over it. When several registered areas overlap, only the
 ---one with the highest z_index reports true — call this every frame for each
----interactive region (e.g. inside a draw behaviour).
----@param area {id: string, x: number, y: number, width: number, height: number, z_index?: number, fixed?: boolean} The area to register and test for hover
+---interactive region (e.g. inside a draw behaviour). The result reflects the previous frame.
+---@param id string Unique id of the area
+---@param x number X position of the area
+---@param y number Y position of the area
+---@param width number Width of the area
+---@param height number Height of the area
+---@param z_index? number Breaks ties between overlapping areas (default: 0)
+---@param fixed? boolean Whether the area is fixed to the screen (default: false)
 ---@return boolean hovering Whether the mouse is hovering over this area (and no higher-z area covers it)
-function sucata.input.is_hover(area) end
+function sucata.input.is_hover(id, x, y, width, height, z_index, fixed) end
