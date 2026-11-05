@@ -8,6 +8,10 @@ sucata.time = {}
 ---@return number delta The delta time in seconds
 function sucata.time.get_delta() end
 
+---Get the delta time in seconds without the time scale; timers use this value
+---@return number delta The unscaled delta time in seconds
+function sucata.time.get_raw_delta() end
+
 ---Get the current frames per second
 ---@return number fps The current FPS
 function sucata.time.get_fps() end
@@ -22,7 +26,11 @@ function sucata.time.create_timer(callback, config) end
 ---@param timer_id number The ID of the timer to pause
 function sucata.time.pause_timer(timer_id) end
 
----Stop a timer
+---Resume a paused timer
+---@param timer_id number The ID of the timer to resume
+function sucata.time.resume_timer(timer_id) end
+
+---Stop and remove a timer
 ---@param timer_id number The ID of the timer to stop
 function sucata.time.stop_timer(timer_id) end
 

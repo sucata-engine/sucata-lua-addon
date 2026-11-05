@@ -25,5 +25,10 @@ additional functionality and enhancements for
 ]
 ```
 
-Then when you create a sucata project, you write `sucata.`, the externsion will
+Then when you create a sucata project, you write `sucata.`, the extension will
 suggest you to enable the addon.
+
+## Sucata 2.0
+
+Sucata 2.0 runs games on LuaJIT, so the addon sets `Lua.runtime.version` to `"LuaJIT"`. The language
+server then flags Lua 5.3/5.4-only syntax such as `//`, bitwise operators and `<const>`.

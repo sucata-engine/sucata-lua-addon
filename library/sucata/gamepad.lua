@@ -35,6 +35,11 @@ sucata.gamepad = {}
 ---@return number count The number of gamepads connected
 function sucata.gamepad.get_count() end
 
+---Check whether a gamepad is connected to a slot
+---@param device number The gamepad slot, from 0 to 7
+---@return boolean connected Whether a gamepad is connected
+function sucata.gamepad.is_connected(device) end
+
 ---Get the human-readable name of a gamepad device
 ---@param device number The gamepad device slot
 ---@return string name The name reported by the gamepad driver

@@ -4,21 +4,36 @@
 ---@class sucata
 sucata = {}
 
+---true when the game runs with `sucata run`, false in a built game
+---@type boolean
+sucata.debug = ...
+
+---Registers an addon. Addons run in every frame phase ordered by `order`, each in its own protected call
+---@generic T : Addon
+---@param addon T|string The addon table, or a module name to require
+---@return T addon The registered addon
+function sucata.use(addon) end
+
 ---@class State
 ---@field id? number The unique identifier of the entity, will have an id when spawned
 ---@field [string] any Custom properties - you can add any field you want to the entity
 
 ---@class Behaviour
----@field tick function? The tick function called every frame, contains state as parameter
----@field draw function? The draw function called every frame, contains state as parameter
----@field free function? The free function called when the entity is destroyed, contains state as parameter
----@field init function? The init function called when the entity is spawned, contains state as parameter
+---@field init fun(state: State)? Called once when the entity is spawned
+---@field tick fun(state: State, dt: number)? Called every frame; dt is the delta time in seconds, already scaled by the time scale
+---@field draw fun(state: State)? Called every frame after tick; drawing is allowed here
+---@field free fun(state: State)? Called once when the entity is destroyed or the game closes
 
----@class Root
----@field init fun()? Called once when the game starts, before the entities
----@field tick fun()? Called every frame, before the entities
----@field draw fun()? Called every frame, before the entities; drawing is allowed here
----@field free fun()? Called once when the game closes, before the entities are freed
+---@class Addon
+---@field order? number When the addon runs in every phase, lower first. sucata.time is -1000, the root 0 and sucata.scene 100 (default: 0)
+---@field name? string Name used in error messages
+---@field init fun(dt: number)? Called once when the game starts
+---@field tick fun(dt: number)? Called every frame
+---@field draw fun(dt: number)? Called every frame after tick; drawing is allowed here
+---@field late fun(dt: number)? Called at the end of every frame, after drawing
+---@field free fun(dt: number)? Called once when the game closes
+
+---@class Root : Addon
 
 ---@class Entity
 ---@field state State The state of the entity
@@ -31,59 +46,6 @@ sucata = {}
 ---@field loop? boolean Whether the timer should loop (default: false)
 
 ---@alias RGBAColor number[] RGBA color as {r, g, b, a?} with values 0.0-1.0; a is optional and defaults to 1.0
-
----@class RectProps
----@field x? number The x position (default: 0)
----@field y? number The y position (default: 0)
----@field width? number The width (default: 50)
----@field height? number The height (default: 50)
----@field color? RGBAColor The color as {r, g, b, a?} (default: {1, 1, 1, 1})
----@field z_index? number The z-index for layering (default: 0)
----@field texture? string Path to texture file (default: "")
----@field scale? number Uniform scale factor (default: 1.0)
----@field scale_x? number Scale factor on X axis (default: 1.0)
----@field scale_y? number Scale factor on Y axis (default: 1.0)
----@field fixed? boolean Whether the rectangle is fixed to the screen (default: false)
----@field origin? number Uniform origin point (default: 0.0)
----@field origin_x? number Origin point on X axis (default: 0.0)
----@field origin_y? number Origin point on Y axis (default: 0.0)
----@field rotation? number Rotation in radians (default: 0.0)
----@field opacity? number Opacity value to the rect from 0.0 to 1.0 (default: 1.0)
----@field atlas_size? number Size of the texture atlas (default: 0.0)
----@field atlas_width? number Width of each frame in the texture atlas (default: 0.0)
----@field atlas_height? number Height of each frame in the texture atlas (default: 0.0)
----@field atlas_spacing? number Spacing between frames in the texture atlas (default: 0.0)
----@field atlas_margin? number Margin around the frames in the texture atlas (default: 0.0)
----@field atlas_x? number X index of the frame in the texture atlas	(default: 0.0)
----@field atlas_y? number Y index of the frame in the texture atlas (default: 0.0)
----@field shader? number ID of the shader to use, returned by load_shader (default: 0)
----@field shader_args? table Arguments for shader rendering (default: {})
----@field tiled? boolean Whether the texture should be tiled (default: false)
----@field tile_size? number Size of the tile (default: 0.0)
----@field tile_width? number Width of the tile (default: 0.0)
----@field tile_height? number Height of the tile (default: 0.0)
-
----@class TextProps
----@field x? number The x position (default: 0)
----@field y? number The y position (default: 0)
----@field text? string The text to display (default: "")
----@field size? number The font size (default: 16)
----@field font? string Path to font file (default: "")
----@field color? RGBAColor The color as {r, g, b, a?} (default: {1, 1, 1, 1})
----@field z_index? number The z-index for layering (default: 0)
----@field scale? number Uniform scale factor (default: 1.0)
----@field scale_x? number Scale factor on X axis (default: 1.0)
----@field scale_y? number Scale factor on Y axis (default: 1.0)
----@field fixed? boolean Whether the text is fixed to the screen (default: false)
----@field origin? number Uniform origin point (default: 0.0)
----@field origin_x? number Origin point on X axis (default: 0.0)
----@field origin_y? number Origin point on Y axis (default: 0.0)
----@field rotation? number Rotation in radians (default: 0.0)
----@field opacity? number Opacity value to the text from 0.0 to 1.0 (default: 1.0)
----@field align? string Text alignment: "left", "center", or "right" (default: "left")
----@field max_width? number Maximum width of the text (default: 0.0)
----@field shader? number ID of the shader to use, returned by load_shader (default: 0)
----@field shader_args? table Arguments for shader rendering (default: {})
 
 ---@class Rect
 ---@field x number The x position
@@ -98,7 +60,7 @@ sucata = {}
 ---@field bottom? number Bottom position as percentage (0-1) (default: 0)
 
 ---@class AudioProps
----@field sound string Path to the sound file
+---@field sound string Path to the sound file (.wav, .mp3, .ogg or .flac)
 ---@field volume? number Volume of the sound (default: 1.0)
 ---@field pitch? number Pitch of the sound (default: 1.0)
 ---@field group? string Audio group (default: "default")

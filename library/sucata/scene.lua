@@ -73,3 +73,7 @@ function sucata.scene.get_global(key) end
 ---Removes a globally stored entity by key
 ---@param key string The key of the global entity to remove
 function sucata.scene.unload_global(key) end
+
+---Get the number of entities in the scene, not counting global entities
+---@return number count The number of entities
+function sucata.scene.count() end

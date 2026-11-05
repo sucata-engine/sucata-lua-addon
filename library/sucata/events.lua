@@ -14,3 +14,8 @@ function sucata.events.emit(name, data) end
 ---@param name string The name of the event
 ---@param callback function The function to call when the event is emitted
 function sucata.events.on(owner, name, callback) end
+
+---Remove the handlers registered by an owner
+---@param owner number|State The entity state or entity ID that registered the handlers
+---@param name? string Only remove handlers for this event; without it every handler of the owner is removed
+function sucata.events.off(owner, name) end
